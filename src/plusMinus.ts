@@ -48,7 +48,7 @@ function plusMinus(arr: number[]): number[] {
 
 function main() {
     // const ws: WriteStream = createWriteStream(process.env["OUTPUT_PATH"]);
-    const ws: WriteStream = createWriteStream("ouput.txt");
+    // const ws: WriteStream = createWriteStream("ouput.txt");
 
     const n: number = parseInt(readLine().trim(), 10);
 
