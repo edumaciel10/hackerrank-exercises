@@ -32,6 +32,7 @@ function readLine(): string {
 
 function largestRectangle(h: number[]): number {
     let retanglesSizeCounter = h.length;
+    // avoid create an matrix, it's consume too much memory when used with reduce an map
     let retangles = Array.from(Array(h.length), () => {
         const k = new Array(retanglesSizeCounter);
         retanglesSizeCounter--;
