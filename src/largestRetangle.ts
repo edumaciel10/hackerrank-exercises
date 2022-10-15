@@ -33,36 +33,14 @@ function readLine(): string {
 function largestRectangle(h: number[]): number {
     let retanglesSizeCounter = h.length;
     // avoid create an matrix, it's consume too much memory when used with reduce an map
-    let retangles = Array.from(Array(h.length), () => {
-        const k = new Array(retanglesSizeCounter);
-        retanglesSizeCounter--;
-        return k;
-    })
-    for(let i = 0; i < h.length; i++) {
-        for(let j = i; j< h.length; j++ ) {
-            retangles[i][j] = h.slice(i,j).reduce((acc, val, index) => {
-                if(index >= j) {
-                    return acc;
-                }
-                if(acc > val) {
-                    return val;
-                }
-                if(val < acc ) {
-                    return val;
-                }
-                return acc
-            },h[i]) 
-            // console.log({retangles});
-        }
-    }
-    const retanglesSize = retangles.map((val) => val.filter(elm => elm))
-    const largestRectangle = retanglesSize.reduce((acc, val) => {
-        const lowestValue = Math.min(...val);
-        acc.push(lowestValue * val.length)
-        return acc;
-    },[])
+    let retangles = []
+    h.reduce((acc, val, index) => {
+      console.log({acc});
+      return acc;
+    },1)
 
-    return Math.max(...largestRectangle);
+    return 0;
+
 }
 
 function main() {
@@ -70,7 +48,7 @@ function main() {
     // const ws: WriteStream = createWriteStream(process.env['OUTPUT_PATH']);
 
     const n: number = parseInt(readLine().trim(), 10);
-
+  console.log({n});
     const h: number[] = readLine().replace(/\s+$/g, '').split(' ').map(hTemp => parseInt(hTemp, 10));
 
     const result: number = largestRectangle(h);
