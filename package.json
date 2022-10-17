@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm run watch-compile\" \"npm run watch-dev\"",
     "watch-compile": "swc src -w --out-dir dist",
-    "watch-dev": "nodemon --watch \"dist/**/*\" --exec \"node ./dist/main.js < ./1.in \"",
+    "watch-dev": "nodemon --watch \"dist/**/*\" --exec \"time node ./dist/main.js < ./1.in \"",
     "build": "swc src -d dist",
     "start": "NODE_ENV=production node dist/main.js",
     "clean": "rm -rf dist"
