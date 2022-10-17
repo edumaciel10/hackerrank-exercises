@@ -29,49 +29,53 @@ function readLine(): string {
  * The function is expected to return a LONG_INTEGER.
  * The function accepts INTEGER_ARRAY h as parameter.
  */
-
-function largestRectangle(h: number[]): number {
-    let retanglesSizeCounter = h.length;
-    // avoid create an matrix, it's consume too much memory when used with reduce an map
-    let greatestArea = h[0];
-    let lastActualArea = 1;
-    for(let i =0; i<h.length;i++) {
-        let actualArea = 1;
-        for(let j =i; j<h.length;j++) {
-            console.count(1)
-            if(h[i] <= h[j]) {
-                actualArea = h[i] * (j-i+1);
-                console.log({actualArea, greatestArea, i, j})
-                if(actualArea < lastActualArea) {
-                    break;
-                }
-                if(actualArea < greatestArea) {
-                    continue;
-                }
-                lastActualArea = actualArea;
-                greatestArea = actualArea
-                continue;
-            }
-            if(h[i] > h[j]) {
-                actualArea = h[j] * (j-i+1);
-                if(actualArea < lastActualArea) {
-                    break;
-                }
-                console.log({actualArea, greatestArea, i, j})
-                if(actualArea < greatestArea) {
-                    continue;
-                }
-                lastActualArea = actualArea;
-                greatestArea = actualArea
-                continue;
-            }
-        }   
+function getAllIndexes(arr: number[], val: number) : number[] {
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
     }
+    return indexes;
+}
+const getIndexesFromValue = (h: number[], value:number) => {
+        const indexes = getAllIndexes(h, value);
+        return {
+            value,
+            indexes,
+        }
+}
+const rightArea = (arr: number[], actualValue:number,actualIndex:number) => {
+    if(arr.length == 0) {
+        return 0;
+    }
+    const lowerValueIndex = arr.findIndex((value) => value<actualValue)
+    const area = actualValue * ((lowerValueIndex == -1 ? arr.length:lowerValueIndex+1));
 
-    console.log(greatestArea);
+    return area;
+}
 
-    return 0;
+function largestRectangle(h: number[]): number{
+    let greatestArea = h[0];
 
+    const smallestValuesSort = h.slice().sort((a: number, b: number) => a - b);
+    for(let i =0; i < smallestValuesSort.length; i++) {
+        const {value, indexes} = getIndexesFromValue(h, smallestValuesSort[i]);
+        const nonSequentialIndexes = indexes.filter((index, i) => index !== indexes[i-1]+1);
+        if(i ==0 ) {
+            greatestArea = value * h.length;
+            continue;
+        }
+
+        const actualArea = nonSequentialIndexes.reduce((acc, actualIndex) => {
+            const valueRightArea = rightArea(h.slice(actualIndex+1, h.length), value, actualIndex)
+            const valueLeftArea = actualIndex-1 >= 0 ? rightArea(h.slice(0, actualIndex-1).reverse(), value, actualIndex) : 0;
+            return acc += (valueRightArea + valueLeftArea);
+        }, 0)
+
+        if(actualArea > greatestArea) {
+            greatestArea = actualArea;
+        }
+    }
+    return greatestArea;
 }
 
 function main() {
@@ -79,7 +83,6 @@ function main() {
     // const ws: WriteStream = createWriteStream(process.env['OUTPUT_PATH']);
 
     const n: number = parseInt(readLine().trim(), 10);
-  console.log({n});
     const h: number[] = readLine().replace(/\s+$/g, '').split(' ').map(hTemp => parseInt(hTemp, 10));
 
     const result: number = largestRectangle(h);
